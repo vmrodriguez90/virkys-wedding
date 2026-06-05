@@ -37,6 +37,28 @@
         </p>
       </div>
 
+      <!-- Floating photos: drift up in front of the pinned text scene.
+           data-start/end = window within the photos scroll-phase (0..1);
+           data-speed = parallax depth. left/width set inline per photo.
+           Placeholders from i.pravatar.cc — swap for real photos in /images. -->
+      <div class="photos" id="photos" aria-hidden="true">
+        <img class="photo" src="https://i.pravatar.cc/600?img=12" alt=""
+             loading="lazy" decoding="async"
+             style="left:15%; width:60vw" data-start="0.00" data-end="0.42" data-speed="1.00" />
+        <img class="photo" src="https://i.pravatar.cc/600?img=5" alt=""
+             loading="lazy" decoding="async"
+             style="left:42%; width:48vw" data-start="0.18" data-end="0.60" data-speed="0.88" />
+        <img class="photo" src="https://i.pravatar.cc/600?img=26" alt=""
+             loading="lazy" decoding="async"
+             style="left:9%; width:64vw" data-start="0.36" data-end="0.78" data-speed="1.12" />
+        <img class="photo" src="https://i.pravatar.cc/600?img=14" alt=""
+             loading="lazy" decoding="async"
+             style="left:44%; width:46vw" data-start="0.54" data-end="0.94" data-speed="0.94" />
+        <img class="photo" src="https://i.pravatar.cc/600?img=32" alt=""
+             loading="lazy" decoding="async"
+             style="left:18%; width:56vw" data-start="0.70" data-end="1.00" data-speed="1.04" />
+      </div>
+
       <!-- Layer 4: the top-right dark dot scaled up = colour flood -->
       <span class="flood" id="flood" aria-hidden="true"></span>
 

@@ -48,7 +48,7 @@ body {
 /* ---- scroll structure -------------------------------------- */
 .scroll-track {
   position: relative;
-  height: 560vh; /* total scroll distance — tune alongside script.js phases */
+  height: 880vh; /* total scroll distance — tune alongside script.js phases */
 }
 
 .stage {
@@ -152,6 +152,28 @@ body {
 
 .corner-dot--light {
   background: var(--form-fg);
+}
+
+/* ---- floating photos (in front of the text scene) --------- */
+.photos {
+  position: absolute;
+  inset: 0;
+  z-index: 3; /* above text content, below the colour flood (z4) */
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.photo {
+  position: absolute;
+  top: 0;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  opacity: 0;
+  transform: translateY(120vh);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.28);
+  background: #e9e7e2; /* tint shown before the image loads */
+  will-change: transform, opacity;
 }
 
 /* ---- layer 4: colour flood (the corner dot, grown) -------- */
@@ -346,7 +368,8 @@ body {
     scroll-snap-type: y proximity;
   }
   .wipe,
-  .flood {
+  .flood,
+  .photos {
     display: none;
   }
   .layer {

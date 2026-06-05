@@ -14,6 +14,7 @@
   var introWordmark = document.getElementById("introWordmark");
   var wipe = document.getElementById("wipe");
   var textLayer = document.getElementById("layerText");
+  var photoEls = document.querySelectorAll(".photo");
   var flood = document.getElementById("flood");
   var formLayer = document.getElementById("layerForm");
   var scrollHint = document.getElementById("scrollHint");
@@ -36,12 +37,13 @@
 
   /* ---- phase boundaries (keep in sync with --scroll-track) -- */
   var P = {
-    introHold: [0.0, 0.05],
-    wipeX: [0.05, 0.22], // dot grows horizontally into a bar
-    wipeY: [0.22, 0.38], // bar grows vertically -> white fill
-    textHold: [0.38, 0.54],
-    floodIn: [0.54, 0.72], // corner dot floods to reveal form
-    formHold: [0.72, 1.0],
+    introHold: [0.0, 0.03],
+    wipeX: [0.03, 0.13], // dot grows horizontally into a bar
+    wipeY: [0.13, 0.23], // bar grows vertically -> white fill
+    textHold: [0.23, 0.3], // white text settles & holds
+    photos: [0.3, 0.66], // photos drift up in front of the pinned text
+    floodIn: [0.66, 0.8], // corner dot floods to reveal form
+    formHold: [0.8, 1.0],
   };
 
   // Base pixel sizes of the two seed circles (see styles.css).
@@ -91,9 +93,28 @@
     /* --- Layer 3: white text scene --------------------------- */
     var textIn = phase(progress, P.wipeY[0], P.wipeY[1]);
     textLayer.style.opacity = String(textIn);
-    // subtle parallax lift as we move through the hold
-    var textShift = lerp(24, -24, phase(progress, P.wipeY[0], P.floodIn[1]));
+    // Ease into place, then hold pinned through the photos phase.
+    var textShift = lerp(24, 0, phase(progress, P.wipeY[0], P.textHold[1]));
     textLayer.style.transform = "translateY(" + textShift + "px)";
+
+    /* --- Floating photos: parallax up + cross-fade ----------- */
+    var photosT = phase(progress, P.photos[0], P.photos[1]);
+    for (var i = 0; i < photoEls.length; i++) {
+      var el = photoEls[i];
+      var start = parseFloat(el.dataset.start);
+      var end = parseFloat(el.dataset.end);
+      var speed = parseFloat(el.dataset.speed) || 1;
+      var localP = phase(photosT, start, end);
+      // travel from below the viewport (+) up past the top (-)
+      var y = lerp(118, -118, localP) * speed;
+      // fade in on entry, out on exit (18% of the window at each edge)
+      var fade = Math.min(
+        clamp(localP / 0.18, 0, 1),
+        clamp((1 - localP) / 0.18, 0, 1)
+      );
+      el.style.transform = "translateY(" + y + "vh)";
+      el.style.opacity = String(fade);
+    }
 
     /* --- Layer 4: colour flood ------------------------------- */
     var floodT = easeInOut(phase(progress, P.floodIn[0], P.floodIn[1]));

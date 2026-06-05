@@ -15,8 +15,10 @@ circles double as the next scene's background:
 2. **Wipe** — the white dot grows horizontally into a line, then vertically to
    flood the screen white.
 3. **White text** — the announcement, with the wordmark top-left and a dark dot
-   top-right.
-4. **Colour flood → form** — the top-right dot expands to flood the screen and
+   top-right. As you keep scrolling, the screen stays pinned while square photos
+   drift upward in front of the text (parallax + cross-fade).
+4. **Colour flood → form** — once the photos have passed, the top-right dot
+   expands to flood the screen and
    reveal the RSVP form. Clicking the **`de aquí`** / **`de acá`** toggle selects
    it and recolours the background (`de aquí` → coral, `de acá` → blue).
 
@@ -40,6 +42,15 @@ The scroll timing lives in two places that must stay roughly in sync:
 - `script.js` → the `P` object holds the phase boundaries (0→1 global progress)
   for each transition. `COVER` is how far the wipe/flood circles scale to cover
   the viewport.
+
+## Swapping the photos
+
+The floating photos are placeholders pulled from `i.pravatar.cc` (random square
+portraits). To use real photos, drop image files into an `images/` folder and
+change the `src` of each `<img class="photo">` in `index.html` (e.g.
+`src="images/childhood-1.jpg"`). Each photo's scroll behaviour is controlled by
+its inline `left`/`width` and the `data-start` / `data-end` (window within the
+photos phase) / `data-speed` (parallax depth) attributes.
 
 ## Accessibility
 
