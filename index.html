@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="las virkys — nos casamos. 29 de mayo de 2027. madrid." />
+  <title>las virkys</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- The tall track supplies the scroll distance; the stage stays pinned. -->
+  <div class="scroll-track" id="scrollTrack">
+    <div class="stage" id="stage">
+
+      <!-- Layer 1: black intro — wordmark + centered white dot -->
+      <div class="layer layer--intro" id="layerIntro">
+        <p class="wordmark wordmark--center" id="introWordmark">las virkys</p>
+        <span class="intro-dot" id="introDot" aria-hidden="true"></span>
+      </div>
+
+      <!-- Layer 2: the centered white dot scaled up = white panel reveal -->
+      <span class="wipe" id="wipe" aria-hidden="true"></span>
+
+      <!-- Layer 3: white text scene -->
+      <div class="layer layer--text" id="layerText">
+        <p class="wordmark wordmark--corner">las virkys</p>
+        <span class="corner-dot" aria-hidden="true"></span>
+        <p class="headline">
+          nos casamos. 29 de mayo de 2027. madrid. aquí. acá. ustedes y
+          nosotras. por ahora, es lo único que tenés que saber.
+        </p>
+      </div>
+
+      <!-- Layer 4: the top-right dark dot scaled up = colour flood -->
+      <span class="flood" id="flood" aria-hidden="true"></span>
+
+      <!-- Layer 5: the RSVP form -->
+      <div class="layer layer--form" id="layerForm">
+        <p class="wordmark wordmark--corner wordmark--light">las virkys</p>
+        <span class="corner-dot corner-dot--light" aria-hidden="true"></span>
+
+        <form class="rsvp" id="rsvpForm" novalidate>
+          <h1 class="form-heading">
+            sí, soy muy<br />ansioso<br />y quiero confirmar<br />ahora-ahora-ahora
+          </h1>
+
+          <div class="toggle" role="group" aria-label="¿De dónde venís?">
+            <button type="button" class="toggle-btn" data-theme="coral" id="btnAqui">
+              <span class="check" aria-hidden="true">✓</span>de aquí
+            </button>
+            <button type="button" class="toggle-btn" data-theme="blue" id="btnAca">
+              <span class="check" aria-hidden="true">✓</span>de acá
+            </button>
+          </div>
+
+          <label class="field">
+            <span class="sr-only">Email 1</span>
+            <input type="email" placeholder="you@example.com" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span class="sr-only">Email 2</span>
+            <input type="email" placeholder="you@example.com" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span class="sr-only">Email 3</span>
+            <input type="email" placeholder="you@example.com" autocomplete="off" />
+          </label>
+
+          <button type="submit" class="ok-btn">OK</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Hint to encourage the first scroll -->
+  <div class="scroll-hint" id="scrollHint" aria-hidden="true">scroll</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
