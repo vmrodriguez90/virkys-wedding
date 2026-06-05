@@ -12,7 +12,6 @@
   var track = document.getElementById("scrollTrack");
   var stage = document.getElementById("stage");
   var introWordmark = document.getElementById("introWordmark");
-  var introDot = document.getElementById("introDot");
   var wipe = document.getElementById("wipe");
   var textLayer = document.getElementById("layerText");
   var flood = document.getElementById("flood");
@@ -37,11 +36,11 @@
 
   /* ---- phase boundaries (keep in sync with --scroll-track) -- */
   var P = {
-    introHold: [0.0, 0.12],
-    wipeX: [0.12, 0.26], // dot grows horizontally into a line
-    wipeY: [0.26, 0.4], // line grows vertically -> white fill
-    textHold: [0.4, 0.55],
-    floodIn: [0.55, 0.72], // corner dot floods to reveal form
+    introHold: [0.0, 0.05],
+    wipeX: [0.05, 0.22], // dot grows horizontally into a bar
+    wipeY: [0.22, 0.38], // bar grows vertically -> white fill
+    textHold: [0.38, 0.54],
+    floodIn: [0.54, 0.72], // corner dot floods to reveal form
     formHold: [0.72, 1.0],
   };
 
@@ -74,24 +73,20 @@
     /* --- Layer 1: intro wordmark fades as the wipe takes over --- */
     var introFade = phase(progress, P.wipeX[0], P.wipeY[1]);
     introWordmark.style.opacity = String(1 - introFade);
-    // The visible centre dot hides the moment the wipe element takes over.
-    introDot.style.opacity = progress < P.wipeX[0] ? "1" : "0";
 
-    /* --- Layer 2: white wipe — scaleX then scaleY ------------- */
+    /* --- Layer 2: white wipe — the centre dot itself ----------- */
+    // Baseline scale(1) IS the visible 12px dot. It first stretches
+    // horizontally (scaleX, full height retained) into a bar, then grows
+    // vertically (scaleY) to flood the screen white.
     var sx = easeInOut(phase(progress, P.wipeX[0], P.wipeX[1]));
     var sy = easeInOut(phase(progress, P.wipeY[0], P.wipeY[1]));
-    var wipeScaleX = lerp(0, coverX, sx);
-    var wipeScaleY = lerp(0, coverY, sy);
-    if (progress < P.wipeX[0]) {
-      wipe.style.transform = "scale(0)";
-    } else {
-      // Square off the dot into a bar as it stretches, then to full panel.
-      var radius = lerp(50, 0, clamp(sx + sy, 0, 1));
-      wipe.style.borderRadius = radius + "%";
-      wipe.style.transform =
-        "scaleX(" + Math.max(wipeScaleX, 0.001) + ") scaleY(" +
-        Math.max(wipeScaleY, 0.001) + ")";
-    }
+    var wipeScaleX = lerp(1, coverX, sx);
+    var wipeScaleY = lerp(1, coverY, sy);
+    // Circle -> bar (corners square off as it stretches), then full panel.
+    var radius = lerp(50, 0, clamp(Math.max(sx, sy), 0, 1));
+    wipe.style.borderRadius = radius + "%";
+    wipe.style.transform =
+      "scaleX(" + wipeScaleX + ") scaleY(" + wipeScaleY + ")";
 
     /* --- Layer 3: white text scene --------------------------- */
     var textIn = phase(progress, P.wipeY[0], P.wipeY[1]);
