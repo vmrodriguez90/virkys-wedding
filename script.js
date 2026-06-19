@@ -89,11 +89,14 @@
       "scaleX(" + wipeScaleX + ") scaleY(" + wipeScaleY + ")";
 
     /* --- Layer 3: white text scene --------------------------- */
-    var textIn = phase(progress, P.wipeY[0], P.wipeY[1]);
-    textLayer.style.opacity = String(textIn);
-    // Ease into place, then hold pinned through the photos phase.
+    var textOpen = phase(progress, P.wipeY[0], P.wipeY[1]);
+    textLayer.style.opacity = String(textOpen);
+    // Zoom in as the white opens: the text grows to full size exactly when
+    // the panel finishes opening, then eases its drift and holds pinned.
+    var textScale = lerp(0.62, 1, easeInOut(textOpen));
     var textShift = lerp(24, 0, phase(progress, P.wipeY[0], P.textHold[1]));
-    textLayer.style.transform = "translateY(" + textShift + "px)";
+    textLayer.style.transform =
+      "translateY(" + textShift + "px) scale(" + textScale + ")";
 
     /* --- Floating photos: parallax up + cross-fade ----------- */
     var photosT = phase(progress, P.photos[0], P.photos[1]);
