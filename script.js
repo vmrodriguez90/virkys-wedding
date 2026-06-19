@@ -18,6 +18,10 @@
   var flood = document.getElementById("flood");
   var formLayer = document.getElementById("layerForm");
   var scrollHint = document.getElementById("scrollHint");
+  var thanks = document.getElementById("thanks");
+  var thanksText = document.getElementById("thanksText");
+
+  var seed = {}; // seed-square geometry, recomputed on resize (see layoutSeeds)
 
   /* ---- maths helpers --------------------------------------- */
   function clamp(v, lo, hi) {
@@ -46,28 +50,45 @@
     formHold: [0.8, 1.0],
   };
 
-  // Base pixel sizes of the two seed squares (see styles.css).
-  var WIPE_DOT = 12;
-  var FLOOD_DOT = 13;
-  var SAFETY = 1.25; // overshoot so edges are never visible
-
   var ticking = false;
   var hintHidden = false;
 
-  function render() {
-    ticking = false;
-
+  // Size the seed squares to the viewport so they can be scaled DOWN to a dot
+  // and back up with crisp edges (every displayed scale stays <= 1). Recomputed
+  // on load + resize.
+  function layoutSeeds() {
     var vw = window.innerWidth;
     var vh = window.innerHeight;
     var diag = Math.sqrt(vw * vw + vh * vh);
 
-    // Cover scales derived from the live viewport so the wipes always fill it.
-    var coverX = (vw / WIPE_DOT) * SAFETY;
-    var coverY = (vh / WIPE_DOT) * SAFETY;
-    // The flood seed sits near the top-right corner, so it must reach the far
-    // (bottom-left) corner: scaled half-diagonal of the square must cover it.
-    var coverFlood =
-      (diag / ((FLOOD_DOT / 2) * Math.SQRT2)) * SAFETY;
+    // White wipe: a square centred on the screen.
+    var wSide = diag * 1.06;
+    seed.wBase = 12 / wSide; // appears as a 12px dot
+    seed.wMaxX = (vw * 1.06) / wSide; // covers full width  (<= 1)
+    seed.wMaxY = (vh * 1.06) / wSide; // covers full height (<= 1)
+    wipe.style.width = wipe.style.height = wSide + "px";
+    wipe.style.left = vw / 2 - wSide / 2 + "px";
+    wipe.style.top = vh / 2 - wSide / 2 + "px";
+
+    // Colour flood: a square centred on the top-right corner dot.
+    var rem = 16;
+    var topOff = Math.min(Math.max(1.5 * rem, 0.055 * vw), 2.6 * rem);
+    var rightOff = Math.min(Math.max(1.5 * rem, 0.06 * vw), 2.6 * rem);
+    var half = 6.5;
+    var cx = vw - rightOff - half;
+    var cy = topOff + half;
+    var reach = Math.max(cx, vw - cx, cy, vh - cy);
+    var fSide = 2 * reach * 1.08;
+    seed.fBase = 13 / fSide; // appears as the 13px corner dot
+    seed.fMax = 1; // at scale 1 the square covers the viewport
+    flood.style.width = flood.style.height = fSide + "px";
+    flood.style.left = cx - fSide / 2 + "px";
+    flood.style.top = cy - fSide / 2 + "px";
+    flood.style.right = "auto";
+  }
+
+  function render() {
+    ticking = false;
 
     var trackRect = track.getBoundingClientRect();
     var scrollable = track.offsetHeight - window.innerHeight;
@@ -77,14 +98,14 @@
     var introFade = phase(progress, P.wipeX[0], P.wipeY[1]);
     introWordmark.style.opacity = String(1 - introFade);
 
-    /* --- Layer 2: white wipe — the centre square itself -------- */
-    // Baseline scale(1) IS the visible 12px square. It first stretches
-    // horizontally (scaleX, full height retained) into a bar, then grows
-    // vertically (scaleY) to flood the screen white.
+    /* --- Layer 2: white wipe — a crisp square grown from centre -- */
+    // The seed square is scaled DOWN to a 12px dot then back up, so every
+    // displayed scale is <= 1 and the edges stay sharp. It widens first
+    // (scaleX), then grows tall (scaleY) to flood the screen white.
     var sx = easeInOut(phase(progress, P.wipeX[0], P.wipeX[1]));
     var sy = easeInOut(phase(progress, P.wipeY[0], P.wipeY[1]));
-    var wipeScaleX = lerp(1, coverX, sx);
-    var wipeScaleY = lerp(1, coverY, sy);
+    var wipeScaleX = lerp(seed.wBase, seed.wMaxX, sx);
+    var wipeScaleY = lerp(seed.wBase, seed.wMaxY, sy);
     wipe.style.transform =
       "scaleX(" + wipeScaleX + ") scaleY(" + wipeScaleY + ")";
 
@@ -117,10 +138,9 @@
       el.style.opacity = String(fade);
     }
 
-    /* --- Layer 4: colour flood ------------------------------- */
+    /* --- Layer 4: colour flood (crisp square from the dot) --- */
     var floodT = easeInOut(phase(progress, P.floodIn[0], P.floodIn[1]));
-    flood.style.transform =
-      "scale(" + Math.max(lerp(0, coverFlood, floodT), 0.001) + ")";
+    flood.style.transform = "scale(" + lerp(seed.fBase, seed.fMax, floodT) + ")";
 
     /* --- Layer 5: form --------------------------------------- */
     var formIn = phase(progress, P.floodIn[0] + 0.05, P.floodIn[1] + 0.02);
@@ -162,10 +182,28 @@
       select(btnAca, "blue");
     });
 
-    // The form intentionally performs no action.
+    // The form sends nothing — it reveals the thank-you + live countdown.
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      form.style.display = "none";
+      thanks.hidden = false;
+      updateCountdown();
+      setInterval(updateCountdown, 30000);
     });
+  }
+
+  // Live countdown to the wedding: 29 May 2027, 19:30 Madrid (CEST = UTC+2).
+  var WEDDING = Date.UTC(2027, 4, 29, 17, 30, 0);
+  function updateCountdown() {
+    var diff = Math.max(0, WEDDING - Date.now());
+    var days = Math.floor(diff / 86400000);
+    var hours = Math.floor((diff % 86400000) / 3600000);
+    thanksText.textContent =
+      "gracias, ahora solo queda esperar " +
+      days +
+      " días y " +
+      hours +
+      "h horas.";
   }
 
   setupForm();
@@ -177,6 +215,12 @@
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
+  window.addEventListener("resize", onResize, { passive: true });
+  layoutSeeds();
   render(); // initial paint
+
+  function onResize() {
+    layoutSeeds();
+    onScroll();
+  }
 })();
