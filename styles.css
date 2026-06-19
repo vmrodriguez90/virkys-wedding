@@ -71,6 +71,7 @@ body {
 
 /* ---- wordmark --------------------------------------------- */
 .wordmark {
+  font-family: "Fira Sans", system-ui, sans-serif;
   font-size: clamp(0.8rem, 3.4vw, 1.05rem);
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -104,7 +105,7 @@ body {
   z-index: 1;
 }
 
-/* ---- layer 2: white wipe — the centre dot, then grown ------ */
+/* ---- layer 2: white wipe — the centre square, then grown -- */
 .wipe {
   position: absolute;
   top: 50%;
@@ -112,12 +113,11 @@ body {
   width: 12px;
   height: 12px;
   margin: -6px 0 0 -6px;
-  border-radius: 999px;
   background: var(--white);
-  transform: scale(1); /* baseline = the visible intro dot */
+  transform: scale(1); /* baseline = the visible intro square */
   transform-origin: center center;
   z-index: 2;
-  will-change: transform, border-radius;
+  will-change: transform;
   pointer-events: none;
 }
 
@@ -145,7 +145,6 @@ body {
   right: clamp(1.5rem, 6vw, 2.6rem);
   width: 13px;
   height: 13px;
-  border-radius: 999px;
   background: var(--black);
   z-index: 3;
 }
@@ -176,14 +175,13 @@ body {
   will-change: transform, opacity;
 }
 
-/* ---- layer 4: colour flood (the corner dot, grown) -------- */
+/* ---- layer 4: colour flood (the corner square, grown) ----- */
 .flood {
   position: absolute;
   top: clamp(1.5rem, 5.5vw, 2.6rem);
   right: clamp(1.5rem, 6vw, 2.6rem);
   width: 13px;
   height: 13px;
-  border-radius: 999px;
   background: var(--form-bg);
   transform: scale(0);
   transform-origin: center center;

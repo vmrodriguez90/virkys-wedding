@@ -38,15 +38,15 @@
   /* ---- phase boundaries (keep in sync with --scroll-track) -- */
   var P = {
     introHold: [0.0, 0.03],
-    wipeX: [0.03, 0.13], // dot grows horizontally into a bar
+    wipeX: [0.03, 0.13], // square grows horizontally into a bar
     wipeY: [0.13, 0.23], // bar grows vertically -> white fill
     textHold: [0.23, 0.3], // white text settles & holds
     photos: [0.3, 0.66], // photos drift up in front of the pinned text
-    floodIn: [0.66, 0.8], // corner dot floods to reveal form
+    floodIn: [0.66, 0.8], // corner square floods to reveal form
     formHold: [0.8, 1.0],
   };
 
-  // Base pixel sizes of the two seed circles (see styles.css).
+  // Base pixel sizes of the two seed squares (see styles.css).
   var WIPE_DOT = 12;
   var FLOOD_DOT = 13;
   var SAFETY = 1.25; // overshoot so edges are never visible
@@ -65,8 +65,9 @@
     var coverX = (vw / WIPE_DOT) * SAFETY;
     var coverY = (vh / WIPE_DOT) * SAFETY;
     // The flood seed sits near the top-right corner, so it must reach the far
-    // (bottom-left) corner: its scaled radius needs to cover the full diagonal.
-    var coverFlood = (diag / (FLOOD_DOT / 2)) * SAFETY;
+    // (bottom-left) corner: scaled half-diagonal of the square must cover it.
+    var coverFlood =
+      (diag / ((FLOOD_DOT / 2) * Math.SQRT2)) * SAFETY;
 
     var trackRect = track.getBoundingClientRect();
     var scrollable = track.offsetHeight - window.innerHeight;
@@ -76,17 +77,14 @@
     var introFade = phase(progress, P.wipeX[0], P.wipeY[1]);
     introWordmark.style.opacity = String(1 - introFade);
 
-    /* --- Layer 2: white wipe — the centre dot itself ----------- */
-    // Baseline scale(1) IS the visible 12px dot. It first stretches
+    /* --- Layer 2: white wipe — the centre square itself -------- */
+    // Baseline scale(1) IS the visible 12px square. It first stretches
     // horizontally (scaleX, full height retained) into a bar, then grows
     // vertically (scaleY) to flood the screen white.
     var sx = easeInOut(phase(progress, P.wipeX[0], P.wipeX[1]));
     var sy = easeInOut(phase(progress, P.wipeY[0], P.wipeY[1]));
     var wipeScaleX = lerp(1, coverX, sx);
     var wipeScaleY = lerp(1, coverY, sy);
-    // Circle -> bar (corners square off as it stretches), then full panel.
-    var radius = lerp(50, 0, clamp(Math.max(sx, sy), 0, 1));
-    wipe.style.borderRadius = radius + "%";
     wipe.style.transform =
       "scaleX(" + wipeScaleX + ") scaleY(" + wipeScaleY + ")";
 
