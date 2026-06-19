@@ -134,10 +134,10 @@ body {
 
 .headline {
   font-size: clamp(2.1rem, 11vw, 3.4rem);
-  line-height: 0.9;
+  line-height: 0.86;
   font-weight: 500;
   letter-spacing: -0.03em;
-  max-width: 18ch;
+  max-width: 70%;
 }
 
 .corner-dot {
