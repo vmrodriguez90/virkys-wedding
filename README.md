@@ -52,6 +52,29 @@ change the `src` of each `<img class="photo">` in `index.html` (e.g.
 its inline `left`/`width` and the `data-start` / `data-end` (window within the
 photos phase) / `data-speed` (parallax depth) attributes.
 
+## RSVP → Google Sheet
+
+Al apretar **OK**, el sitio manda los datos del formulario (`nombre`, `correo`,
+`mensaje`, `origen`) por query params a un Web App de Google Apps Script, que los
+escribe en un Spreadsheet. El código está en `google-apps-script/Code.gs`.
+
+**Pasos:**
+
+1. Creá un Google Spreadsheet y copiá su ID desde la URL
+   (`.../spreadsheets/d/<ID>/edit`).
+2. En `script.google.com` → **Nuevo proyecto**, pegá `google-apps-script/Code.gs`
+   y completá `SPREADSHEET_ID` con ese ID.
+3. **Implementar → Nueva implementación → Aplicación web**
+   - Ejecutar como: **Yo**
+   - Quién tiene acceso: **Cualquier persona**
+4. Copiá la URL que termina en `/exec`.
+5. Pegala en `script.js` en la constante `RSVP_ENDPOINT`.
+
+Mientras `RSVP_ENDPOINT` esté vacío, el formulario sigue funcionando (muestra el
+"gracias" + countdown) pero no envía nada. El envío usa `fetch(..., { mode:
+"no-cors" })`, así que no necesita configuración de CORS: la petición llega y la
+fila se agrega; el sitio no lee la respuesta.
+
 ## Accessibility
 
 - Respects `prefers-reduced-motion`: the scroll-scrub engine is skipped and the

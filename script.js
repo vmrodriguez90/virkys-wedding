@@ -162,34 +162,57 @@
     }
   }
 
+  // Google Apps Script web-app URL (ends in /exec). Leave empty to skip the
+  // network call; paste your deployed endpoint to start saving to the Sheet.
+  var RSVP_ENDPOINT = "";
+
   /* ---- toggle + form interaction --------------------------- */
   function setupForm() {
     var btnAqui = document.getElementById("btnAqui");
     var btnAca = document.getElementById("btnAca");
     var form = document.getElementById("rsvpForm");
+    var origen = ""; // "de aquí" / "de acá" — whichever pill is selected
 
-    function select(btn, theme) {
+    function select(btn, theme, label) {
       btnAqui.classList.toggle("is-selected", btn === btnAqui);
       btnAca.classList.toggle("is-selected", btn === btnAca);
       stage.classList.remove("theme-blue", "theme-coral");
       stage.classList.add("theme-" + theme); // coral -> de aquí, blue -> de acá
+      origen = label;
     }
 
     btnAqui.addEventListener("click", function () {
-      select(btnAqui, "coral");
+      select(btnAqui, "coral", "de aquí");
     });
     btnAca.addEventListener("click", function () {
-      select(btnAca, "blue");
+      select(btnAca, "blue", "de acá");
     });
 
-    // The form sends nothing — it reveals the thank-you + live countdown.
+    // On OK: save the RSVP to the Sheet, then reveal the thank-you + countdown.
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      saveRsvp(form, origen);
       form.style.display = "none";
       thanks.hidden = false;
       updateCountdown();
       setInterval(updateCountdown, 30000);
     });
+  }
+
+  // Fire-and-forget GET to the Apps Script endpoint with the form data as query
+  // params. "no-cors" lets the request through without needing a CORS response.
+  function saveRsvp(form, origen) {
+    if (!RSVP_ENDPOINT) return;
+    var params = new URLSearchParams({
+      nombre: form.elements["nombre"].value,
+      correo: form.elements["correo"].value,
+      mensaje: form.elements["mensaje"].value,
+      origen: origen
+    });
+    fetch(RSVP_ENDPOINT + "?" + params.toString(), {
+      method: "GET",
+      mode: "no-cors"
+    }).catch(function () {});
   }
 
   // Live countdown to the wedding: 29 May 2027, 19:30 Madrid (CEST = UTC+2).
