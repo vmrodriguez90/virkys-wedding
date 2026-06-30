@@ -133,10 +133,10 @@ body {
 }
 
 .headline {
-  font-size: clamp(2.1rem, 11vw, 3.4rem);
-  line-height: 1;
+  font-size: clamp(1.7rem, 8vw, 2.5rem);
+  line-height: 0.95;
   font-weight: 500;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
   max-width: 70%;
 }
 
@@ -195,7 +195,7 @@ body {
 /* ---- layer 5: form ---------------------------------------- */
 .layer--form {
   justify-content: flex-start;
-  padding: clamp(3.5rem, 13vw, 5.5rem) clamp(1.4rem, 6vw, 2.6rem)
+  padding: clamp(4.5rem, 18vw, 7rem) clamp(1.4rem, 6vw, 2.6rem)
     clamp(2rem, 8vw, 3rem);
   color: var(--form-fg);
   z-index: 5;
@@ -215,10 +215,10 @@ body {
 }
 
 .form-heading {
-  font-size: clamp(2.1rem, 11vw, 3.4rem);
-  line-height: 1;
+  font-size: clamp(1.7rem, 8vw, 2.5rem);
+  line-height: 0.95;
   font-weight: 500;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.03em;
   margin-bottom: clamp(1.4rem, 6vw, 2.2rem);
 }
 
@@ -332,11 +332,11 @@ body {
 }
 
 .thanks-text {
-  font-size: clamp(2.1rem, 11vw, 3.4rem);
-  line-height: 1;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.7rem, 8vw, 2.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
   font-weight: 500;
-  max-width: 70%;
+  max-width: 15ch;
 }
 
 /* ---- theme states (set on .stage by the toggle) ----------- */
