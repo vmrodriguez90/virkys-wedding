@@ -149,6 +149,7 @@ body {
 /* ---- layer 3: white text scene ---------------------------- */
 .layer--text {
   justify-content: center; /* vertically centred in the screen */
+  align-items: center; /* box horizontally centred (text stays left-aligned) */
   padding: clamp(2.5rem, 10vw, 4rem) clamp(1.4rem, 6vw, 2.6rem);
   color: var(--black);
   z-index: 3;
