@@ -1,4 +1,4 @@
-# las virkys
+# las virckys
 
 A one-page, scroll-driven (parallax / wipe) wedding announcement + RSVP site.
 
@@ -11,7 +11,7 @@ Built with plain **HTML / CSS / JS** — no build step, no dependencies.
 As you scroll, a single pinned stage moves through four scenes. The expanding
 circles double as the next scene's background:
 
-1. **Black intro** — "las virkys" with a white dot below center.
+1. **Black intro** — "las virckys" with a white dot below center.
 2. **Wipe** — the white dot grows horizontally into a line, then vertically to
    flood the screen white.
 3. **White text** — the announcement, with the wordmark top-left and a dark dot
