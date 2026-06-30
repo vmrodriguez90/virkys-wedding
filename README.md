@@ -45,12 +45,13 @@ The scroll timing lives in two places that must stay roughly in sync:
 
 ## Swapping the photos
 
-The floating photos are placeholders pulled from `i.pravatar.cc` (random square
-portraits). To use real photos, drop image files into an `images/` folder and
-change the `src` of each `<img class="photo">` in `index.html` (e.g.
-`src="images/childhood-1.jpg"`). Each photo's scroll behaviour is controlled by
-its inline `left`/`width` and the `data-start` / `data-end` (window within the
-photos phase) / `data-speed` (parallax depth) attributes.
+The floating photos live in `images/` (`foto-1.jpg` … `foto-8.jpg`) and are
+referenced by the `<img class="photo">` tags in `index.html`. To replace one,
+drop a new file in `images/` and point its `src` there. Each photo's scroll
+behaviour is controlled by its inline `left`/`width` and the `data-start` /
+`data-end` (window within the photos phase) / `data-speed` (parallax depth)
+attributes. They're shown as squares (`object-fit: cover`), so any aspect ratio
+works — it gets cropped to a square.
 
 ## RSVP → Google Sheet
 
