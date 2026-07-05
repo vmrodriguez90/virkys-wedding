@@ -313,7 +313,28 @@ body {
 /* ---- fields ----------------------------------------------- */
 .field {
   display: block;
+  position: relative;
   margin-bottom: 0.7rem;
+}
+
+/* Fake placeholder: lets the required asterisk be black while the label
+   text stays grey. Behaves like a placeholder — hidden once you type. */
+.field .ph {
+  position: absolute;
+  left: 1.2em;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(0.85rem, 3.6vw, 1rem);
+  color: #9a9a9a;
+  pointer-events: none;
+}
+
+.field .ph .req {
+  color: var(--black);
+}
+
+.field input:not(:placeholder-shown) + .ph {
+  opacity: 0;
 }
 
 .field input {
