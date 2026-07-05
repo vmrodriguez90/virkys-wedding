@@ -14,13 +14,13 @@
  *      - Quién tiene acceso: Cualquier persona
  * 5. Copiá la URL que termina en /exec y pegala en script.js (RSVP_ENDPOINT).
  *
- * Parámetros esperados: nombre, correo, mensaje, origen
+ * Parámetros esperados: nombre, correo, restriccion, mensaje, origen
  * -----------------------------------------------------------------------------
  */
 
 var SPREADSHEET_ID = "PEGAR_AQUI_EL_ID_DEL_SPREADSHEET";
 var SHEET_NAME = "RSVP";
-var HEADERS = ["Fecha", "Nombre", "Correo", "Mensaje", "Origen"];
+var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje", "Origen"];
 
 function doGet(e) {
   return handleRequest(e);
@@ -42,6 +42,7 @@ function handleRequest(e) {
       new Date(),
       p.nombre || "",
       p.correo || "",
+      p.restriccion || "",
       p.mensaje || "",
       p.origen || ""
     ]);

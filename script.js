@@ -244,6 +244,7 @@
     var params = new URLSearchParams({
       nombre: form.elements["nombre"].value,
       correo: form.elements["correo"].value,
+      restriccion: form.elements["restriccion"].value,
       mensaje: form.elements["mensaje"].value,
       origen: origen
     });
