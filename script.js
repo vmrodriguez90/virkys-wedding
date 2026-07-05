@@ -176,6 +176,7 @@
     var btnAqui = document.getElementById("btnAqui");
     var btnAca = document.getElementById("btnAca");
     var form = document.getElementById("rsvpForm");
+    var toggleHint = document.getElementById("toggleHint");
     var origen = ""; // "de aquí" / "de acá" — whichever pill is selected
     var theme = ""; // "coral" / "blue" — for restoring the colour on return
 
@@ -186,6 +187,7 @@
       stage.classList.add("theme-" + t); // coral -> de aquí, blue -> de acá
       origen = label;
       theme = t;
+      toggleHint.hidden = true; // clear the "elegí una opción" warning
     }
 
     btnAqui.addEventListener("click", function () {
@@ -196,8 +198,15 @@
     });
 
     // On OK: save the RSVP, remember it, then reveal the thank-you + countdown.
+    // (Native validation already covers the required text fields.)
     form.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (!origen) {
+        // de aquí / de acá is required but isn't a native input.
+        toggleHint.hidden = false;
+        btnAqui.focus();
+        return;
+      }
       saveRsvp(form, origen);
       remember(RSVP_KEY, theme || "1");
       showThanks(form);

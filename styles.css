@@ -298,6 +298,18 @@ body {
   transform: translateX(0);
 }
 
+.toggle-hint {
+  font-family: "Fira Sans Condensed", system-ui, sans-serif;
+  font-size: clamp(0.75rem, 3.2vw, 0.9rem);
+  color: var(--form-fg);
+  margin: -0.6rem 0 0.9rem;
+  opacity: 0.9;
+}
+
+.toggle-hint[hidden] {
+  display: none;
+}
+
 /* ---- fields ----------------------------------------------- */
 .field {
   display: block;
