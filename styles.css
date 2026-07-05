@@ -317,8 +317,8 @@ body {
   margin-bottom: 0.7rem;
 }
 
-/* Fake placeholder: lets the required asterisk be black while the label
-   text stays grey. Behaves like a placeholder — hidden once you type. */
+/* Fake placeholder: label text + required asterisk, same grey as a real
+   placeholder. Behaves like a placeholder — hidden once you type. */
 .field .ph {
   position: absolute;
   left: 1.2em;
@@ -327,10 +327,6 @@ body {
   font-size: clamp(0.85rem, 3.6vw, 1rem);
   color: #9a9a9a;
   pointer-events: none;
-}
-
-.field .ph .req {
-  color: var(--black);
 }
 
 .field input:not(:placeholder-shown) + .ph {
