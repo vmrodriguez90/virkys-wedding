@@ -167,10 +167,6 @@
   var RSVP_ENDPOINT =
     "https://script.google.com/macros/s/AKfycbwA01s3w3OKi-6cs-UxWqyYTJ9XF1IYLhKmZwpGxpl-pu2E0hh15rDi65PhooUisxk/exec";
 
-  // localStorage key: once someone confirms, we remember it so the thank-you
-  // (not the form) shows on every future visit. Value = chosen theme.
-  var RSVP_KEY = "lasvirkys_rsvp";
-
   /* ---- toggle + form interaction --------------------------- */
   function setupForm() {
     var btnAqui = document.getElementById("btnAqui");
@@ -178,7 +174,6 @@
     var form = document.getElementById("rsvpForm");
     var toggleHint = document.getElementById("toggleHint");
     var origen = ""; // "de aquí" / "de acá" — whichever pill is selected
-    var theme = ""; // "coral" / "blue" — for restoring the colour on return
 
     function select(btn, t, label) {
       btnAqui.classList.toggle("is-selected", btn === btnAqui);
@@ -186,7 +181,6 @@
       stage.classList.remove("theme-blue", "theme-coral");
       stage.classList.add("theme-" + t); // coral -> de aquí, blue -> de acá
       origen = label;
-      theme = t;
       toggleHint.hidden = true; // clear the "elegí una opción" warning
     }
 
@@ -197,7 +191,7 @@
       select(btnAca, "blue", "de acá");
     });
 
-    // On OK: save the RSVP, remember it, then reveal the thank-you + countdown.
+    // On OK: save the RSVP, then reveal the thank-you + countdown.
     // (Native validation already covers the required text fields.)
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -208,18 +202,8 @@
         return;
       }
       saveRsvp(form, origen);
-      remember(RSVP_KEY, theme || "1");
       showThanks(form);
     });
-
-    // Returning visitor who already confirmed: show the thank-you straight away.
-    var prior = recall(RSVP_KEY);
-    if (prior) {
-      if (prior === "blue" || prior === "coral") {
-        stage.classList.add("theme-" + prior);
-      }
-      showThanks(form);
-    }
   }
 
   // Reveal the thank-you message + live countdown in place of the form.
@@ -229,20 +213,6 @@
     updateCountdown();
     if (!showThanks.timer) {
       showThanks.timer = setInterval(updateCountdown, 30000);
-    }
-  }
-
-  // localStorage helpers (guarded for private mode / disabled storage).
-  function remember(key, value) {
-    try {
-      localStorage.setItem(key, value);
-    } catch (err) {}
-  }
-  function recall(key) {
-    try {
-      return localStorage.getItem(key);
-    } catch (err) {
-      return null;
     }
   }
 
