@@ -14,15 +14,13 @@
   var introWordmark = document.getElementById("introWordmark");
   var wipe = document.getElementById("wipe");
   var textLayer = document.getElementById("layerText");
-  var cornerDot = document.getElementById("cornerDot");
   var photoEls = document.querySelectorAll(".photo");
-  var flood = document.getElementById("flood");
   var formLayer = document.getElementById("layerForm");
   var scrollHint = document.getElementById("scrollHint");
   var thanks = document.getElementById("thanks");
   var thanksText = document.getElementById("thanksText");
 
-  var seed = {}; // seed-square geometry, recomputed on resize (see layoutSeeds)
+  var seed = {}; // wipe-square geometry, recomputed on resize (see layoutSeeds)
 
   /* ---- maths helpers --------------------------------------- */
   function clamp(v, lo, hi) {
@@ -47,14 +45,14 @@
     wipeY: [0.13, 0.23], // bar grows vertically -> white fill
     textHold: [0.23, 0.3], // white text settles & holds
     photos: [0.3, 0.66], // photos drift up in front of the pinned text
-    floodIn: [0.66, 0.8], // corner square floods to reveal form
+    reveal: [0.66, 0.8], // form crossfades in over the theme colour
     formHold: [0.8, 1.0],
   };
 
   var ticking = false;
   var hintHidden = false;
 
-  // Size the seed squares to the viewport so they can be scaled DOWN to a dot
+  // Size the wipe square to the viewport so it can be scaled DOWN to a dot
   // and back up with crisp edges (every displayed scale stays <= 1). Recomputed
   // on load + resize.
   function layoutSeeds() {
@@ -70,22 +68,6 @@
     wipe.style.width = wipe.style.height = wSide + "px";
     wipe.style.left = vw / 2 - wSide / 2 + "px";
     wipe.style.top = vh / 2 - wSide / 2 + "px";
-
-    // Colour flood: a square centred on the top-right corner dot.
-    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    var topOff = Math.min(Math.max(1.5 * rem, 0.055 * vw), 2.6 * rem);
-    var rightOff = Math.min(Math.max(1.5 * rem, 0.06 * vw), 2.6 * rem);
-    var half = 6.5;
-    var cx = vw - rightOff - half;
-    var cy = topOff + half;
-    var reach = Math.max(cx, vw - cx, cy, vh - cy);
-    var fSide = 2 * reach * 1.08;
-    seed.fBase = 13 / fSide; // appears as the 13px corner dot
-    seed.fMax = 1; // at scale 1 the square covers the viewport
-    flood.style.width = flood.style.height = fSide + "px";
-    flood.style.left = cx - fSide / 2 + "px";
-    flood.style.top = cy - fSide / 2 + "px";
-    flood.style.right = "auto";
   }
 
   function render() {
@@ -120,10 +102,6 @@
     textLayer.style.transform =
       "translateY(" + textShift + "px) scale(" + textScale + ")";
 
-    // The corner dot fades with the text scene but stays put (no zoom/drift)
-    // so it never separates from the flood square anchored at the same spot.
-    cornerDot.style.opacity = String(textOpen);
-
     /* --- Floating photos: parallax up + cross-fade ----------- */
     var photosT = phase(progress, P.photos[0], P.photos[1]);
     for (var i = 0; i < photoEls.length; i++) {
@@ -143,14 +121,10 @@
       el.style.opacity = String(fade);
     }
 
-    /* --- Layer 4: colour flood (crisp square from the dot) --- */
-    var floodT = easeInOut(phase(progress, P.floodIn[0], P.floodIn[1]));
-    flood.style.transform = "scale(" + lerp(seed.fBase, seed.fMax, floodT) + ")";
-
-    /* --- Layer 5: form --------------------------------------- */
-    var formIn = phase(progress, P.floodIn[0] + 0.05, P.floodIn[1] + 0.02);
+    /* --- Layer 4: form crossfades in over the theme colour ---- */
+    var formIn = phase(progress, P.reveal[0] + 0.05, P.reveal[1] + 0.02);
     formLayer.style.opacity = String(formIn);
-    var interactive = progress >= P.floodIn[1] - 0.02;
+    var interactive = progress >= P.reveal[1] - 0.02;
     formLayer.classList.toggle("is-interactive", interactive);
 
     /* --- one-time scroll hint hide --------------------------- */
