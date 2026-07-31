@@ -71,7 +71,7 @@
     wipe.style.top = vh / 2 - wSide / 2 + "px";
 
     // Colour flood: a square centred on the top-right corner dot.
-    var rem = 16;
+    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
     var topOff = Math.min(Math.max(1.5 * rem, 0.055 * vw), 2.6 * rem);
     var rightOff = Math.min(Math.max(1.5 * rem, 0.06 * vw), 2.6 * rem);
     var half = 6.5;
