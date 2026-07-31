@@ -5,6 +5,14 @@
 (function () {
   "use strict";
 
+  // One-time cleanup: earlier versions of this site remembered a submitted
+  // RSVP in localStorage to skip straight to the thank-you screen. That's no
+  // longer wanted (people should be able to submit again after a refresh),
+  // so drop any leftover flag from a prior visit.
+  try {
+    localStorage.removeItem("lasvirkys_rsvp");
+  } catch (err) {}
+
   var prefersReduced =
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
