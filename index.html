@@ -50,12 +50,16 @@
       <!-- Layer 3: white text scene -->
       <div class="layer layer--text" id="layerText">
         <p class="wordmark wordmark--corner">las virckys</p>
-        <span class="corner-dot" aria-hidden="true"></span>
         <p class="headline">
           nos casamos. 29 de mayo de 2027. madrid. aquí. acá. ustedes y
           nosotras. por ahora, es lo único que tenés que saber.
         </p>
       </div>
+
+      <!-- Corner dot for the text scene: kept outside #layerText so it never
+           inherits that layer's opening zoom transform, staying pinned exactly
+           where the flood square starts (see script.js). -->
+      <span class="corner-dot" id="cornerDot" aria-hidden="true"></span>
 
       <!-- Floating photos: drift up in front of the pinned text scene.
            data-start/end = window within the photos scroll-phase (0..1);

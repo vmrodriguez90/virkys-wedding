@@ -14,6 +14,7 @@
   var introWordmark = document.getElementById("introWordmark");
   var wipe = document.getElementById("wipe");
   var textLayer = document.getElementById("layerText");
+  var cornerDot = document.getElementById("cornerDot");
   var photoEls = document.querySelectorAll(".photo");
   var flood = document.getElementById("flood");
   var formLayer = document.getElementById("layerForm");
@@ -118,6 +119,10 @@
     var textShift = lerp(24, 0, phase(progress, P.wipeY[0], P.textHold[1]));
     textLayer.style.transform =
       "translateY(" + textShift + "px) scale(" + textScale + ")";
+
+    // The corner dot fades with the text scene but stays put (no zoom/drift)
+    // so it never separates from the flood square anchored at the same spot.
+    cornerDot.style.opacity = String(textOpen);
 
     /* --- Floating photos: parallax up + cross-fade ----------- */
     var photosT = phase(progress, P.photos[0], P.photos[1]);
