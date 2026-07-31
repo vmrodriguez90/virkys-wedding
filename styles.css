@@ -163,6 +163,20 @@ body {
   max-width: 70%;
 }
 
+.corner-dot {
+  position: absolute;
+  top: clamp(1.5rem, 5.5vw, 2.6rem);
+  right: clamp(1.5rem, 6vw, 2.6rem);
+  width: 13px;
+  height: 13px;
+  background: var(--black);
+  z-index: 3;
+}
+
+.corner-dot--light {
+  background: var(--form-fg);
+}
+
 /* ---- floating photos (in front of the text scene) --------- */
 .photos {
   position: absolute;
@@ -172,7 +186,7 @@ body {
   right: 0;
   max-width: 400px; /* phone-width column; caps photo size on desktop */
   margin-inline: auto;
-  z-index: 3; /* above the text content */
+  z-index: 3; /* above text content, below the colour flood (z4) */
   overflow: hidden;
   pointer-events: none;
 }
@@ -190,16 +204,31 @@ body {
   will-change: transform, opacity;
 }
 
-/* ---- layer 4: form, crossfading in over the theme colour --- */
+/* ---- layer 4: colour flood (the corner square, grown) ----- */
+.flood {
+  position: absolute;
+  top: clamp(1.5rem, 5.5vw, 2.6rem);
+  right: clamp(1.5rem, 6vw, 2.6rem);
+  width: 13px;
+  height: 13px;
+  background: var(--form-bg);
+  transform: scale(0);
+  transform-origin: center center;
+  z-index: 4;
+  will-change: transform;
+  pointer-events: none;
+  transition: background 0.45s var(--ease);
+}
+
+/* ---- layer 5: form ---------------------------------------- */
 .layer--form {
   justify-content: flex-start;
   padding: clamp(2.5rem, 9vw, 4rem) clamp(1.4rem, 6vw, 2.6rem)
     clamp(2rem, 8vw, 3rem);
-  background: var(--form-bg);
   color: var(--form-fg);
   z-index: 5;
   pointer-events: none; /* enabled by JS once the form is on-screen */
-  transition: background 0.45s var(--ease), color 0.45s var(--ease);
+  transition: color 0.45s var(--ease);
 }
 
 .layer--form.is-interactive {
@@ -375,6 +404,8 @@ body {
   --form-bg: var(--coral);
 }
 
+.stage.theme-blue .flood,
+.stage.theme-coral .flood,
 .stage.theme-blue .layer--form,
 .stage.theme-coral .layer--form {
   /* fg stays white on coloured backgrounds */
@@ -421,6 +452,7 @@ body {
     scroll-snap-type: y proximity;
   }
   .wipe,
+  .flood,
   .photos {
     display: none;
   }
