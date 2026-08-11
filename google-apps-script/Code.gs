@@ -14,13 +14,47 @@
  *      - Quién tiene acceso: Cualquier persona
  * 5. Copiá la URL que termina en /exec y pegala en script.js (RSVP_ENDPOINT).
  *
+ * --- Para actualizar el código ya publicado -----------------------------------
+ * Pegá el archivo nuevo en el editor y usá Implementar → Administrar
+ * implementaciones → ✏️ → Versión: "Nueva versión" → Implementar.
+ * Así la URL /exec se mantiene igual. (Una "Nueva implementación" genera
+ * OTRA URL y habría que volver a cambiarla en script.js.)
+ *
+ * Al agregar el email de confirmación, la primera vez Apps Script va a pedir
+ * un permiso nuevo ("enviar correo en tu nombre"): ejecutá cualquier función
+ * desde el editor (▶) y aceptá el permiso antes de publicar la versión.
+ *
  * Parámetros esperados: nombre, correo, restriccion, mensaje, origen
  * -----------------------------------------------------------------------------
  */
 
-var SPREADSHEET_ID = "PEGAR_AQUI_EL_ID_DEL_SPREADSHEET";
+var SPREADSHEET_ID = "1QnPuzOsk1eixJZZJpy3XkADzoFglo9kzZDkbVWhGX8M";
 var SHEET_NAME = "RSVP";
 var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje", "Origen"];
+
+// Email de confirmación que se envía al invitado tras guardar su RSVP.
+// Poné SEND_CONFIRMATION en false para desactivarlo sin tocar el resto.
+var SEND_CONFIRMATION = true;
+var EMAIL_SUBJECT = "¡nos vemos en la boda! — las virckys";
+
+function buildEmailBody() {
+  return (
+    "¡Hola!\n\n" +
+    "Este correo quiere decir que has completado tu asistencia y que nosotras " +
+    "estamos muy contentas de que vengas a nuestra boda 💘\n\n" +
+    "Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en The Madrid EDITION.\n" +
+    "Aquí tienes la dirección exacta: Pl. de Celenque, 2, Centro, 28013 Madrid\n\n" +
+    "Es un día súper especial para nosotras y, sobre todo, un día de festejo. " +
+    "Así que lo más importante es que vengas con ganas de celebrar con nosotras. " +
+    "Todo lo demás da igual.\n\n" +
+    "Vamos a comer rico, bailar mucho y disfrutar con la gente que más queremos " +
+    "y que forma parte de nuestra vida.\n\n" +
+    "Tenemos muchísimas ganas de que llegue el día y de compartirlo contigo.\n\n" +
+    "Más cerca de la fecha, te volvemos a escribir, no te preocupes.\n\n" +
+    "Un abrazo grande,\n" +
+    "Las virckys"
+  );
+}
 
 function doGet(e) {
   return handleRequest(e);
@@ -47,11 +81,33 @@ function handleRequest(e) {
       p.origen || ""
     ]);
 
+    sendConfirmationEmail(p);
+
     return json({ ok: true });
   } catch (err) {
     return json({ ok: false, error: String(err) });
   } finally {
     lock.releaseLock();
+  }
+}
+
+// Manda el email pre-determinado al correo del invitado. Si el envío falla
+// (correo inválido, cuota agotada, etc.) no rompe el guardado en el Sheet.
+function sendConfirmationEmail(p) {
+  if (!SEND_CONFIRMATION) return;
+  var correo = (p.correo || "").trim();
+  // Chequeo mínimo de formato para no gastar cuota en direcciones rotas.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)) return;
+  try {
+    MailApp.sendEmail({
+      to: correo,
+      subject: EMAIL_SUBJECT,
+      body: buildEmailBody(),
+      name: "las virckys"
+    });
+  } catch (err) {
+    // No re-lanzamos: el RSVP ya quedó guardado, que es lo importante.
+    Logger.log("No se pudo enviar el email a " + correo + ": " + err);
   }
 }
 
