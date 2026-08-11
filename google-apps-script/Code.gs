@@ -28,7 +28,7 @@
  * -----------------------------------------------------------------------------
  */
 
-var SPREADSHEET_ID = "PEGAR_AQUI_EL_ID_DEL_SPREADSHEET";
+var SPREADSHEET_ID = "1QnPuzOsk1eixJZZJpy3XkADzoFglo9kzZDkbVWhGX8M";
 var SHEET_NAME = "RSVP";
 var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje", "Origen"];
 
