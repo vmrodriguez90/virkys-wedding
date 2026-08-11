@@ -37,17 +37,22 @@ var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje
 var SEND_CONFIRMATION = true;
 var EMAIL_SUBJECT = "¡nos vemos en la boda! — las virckys";
 
-function buildEmailBody(nombre) {
-  var saludo = nombre ? "hola, " + nombre + "!" : "hola!";
+function buildEmailBody() {
   return (
-    saludo +
-    "\n\n" +
-    "recibimos tu confirmación. ya estás en la lista :)\n\n" +
-    "te esperamos el 29 de mayo de 2027 en madrid.\n" +
-    "más cerca de la fecha te mandamos todos los detalles.\n\n" +
-    "aquí. acá. ustedes y nosotras.\n\n" +
-    "con amor,\n" +
-    "las virckys"
+    "¡Hola!\n\n" +
+    "Este correo quiere decir que has completado tu asistencia y que nosotras " +
+    "estamos muy contentas de que vengas a nuestra boda 💘\n\n" +
+    "Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en The Madrid EDITION.\n" +
+    "Aquí tienes la dirección exacta: Pl. de Celenque, 2, Centro, 28013 Madrid\n\n" +
+    "Es un día súper especial para nosotras y, sobre todo, un día de festejo. " +
+    "Así que lo más importante es que vengas con ganas de celebrar con nosotras. " +
+    "Todo lo demás da igual.\n\n" +
+    "Vamos a comer rico, bailar mucho y disfrutar con la gente que más queremos " +
+    "y que forma parte de nuestra vida.\n\n" +
+    "Tenemos muchísimas ganas de que llegue el día y de compartirlo contigo.\n\n" +
+    "Más cerca de la fecha, te volvemos a escribir, no te preocupes.\n\n" +
+    "Un abrazo grande,\n" +
+    "Las virckys"
   );
 }
 
@@ -97,7 +102,7 @@ function sendConfirmationEmail(p) {
     MailApp.sendEmail({
       to: correo,
       subject: EMAIL_SUBJECT,
-      body: buildEmailBody((p.nombre || "").trim()),
+      body: buildEmailBody(),
       name: "las virckys"
     });
   } catch (err) {
