@@ -37,9 +37,10 @@ var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje
 var SEND_CONFIRMATION = true;
 var EMAIL_SUBJECT = "¡nos vemos en la boda! — las virckys";
 
-function buildEmailBody() {
+function buildEmailBody(nombre) {
   return (
-    "¡Hola!\n\n" +
+    (nombre ? "¡Hola " + nombre + "!" : "¡Hola!") +
+    "\n\n" +
     "Este correo quiere decir que has completado tu asistencia y que nosotras " +
     "estamos muy contentas de que vengas a nuestra boda 💘\n\n" +
     "Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en The Madrid EDITION.\n" +
@@ -58,9 +59,15 @@ function buildEmailBody() {
 
 // Versión HTML del mismo texto (permite la negrita en el nombre del lugar).
 // El texto plano de arriba queda como respaldo para clientes sin HTML.
-function buildEmailHtmlBody() {
+function buildEmailHtmlBody(nombre) {
+  // El nombre viene del formulario: lo escapamos para que caracteres como
+  // < > & no rompan (ni inyecten) el HTML del email.
+  var nombreHtml = String(nombre || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
   return (
-    "<p>¡Hola!</p>" +
+    "<p>" + (nombreHtml ? "¡Hola " + nombreHtml + "!" : "¡Hola!") + "</p>" +
     "<p>Este correo quiere decir que has completado tu asistencia y que nosotras " +
     "estamos muy contentas de que vengas a nuestra boda 💘</p>" +
     "<p>Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en " +
@@ -130,8 +137,8 @@ function sendConfirmationEmail(p) {
     MailApp.sendEmail({
       to: correo,
       subject: EMAIL_SUBJECT,
-      body: buildEmailBody(),
-      htmlBody: buildEmailHtmlBody(),
+      body: buildEmailBody((p.nombre || "").trim()),
+      htmlBody: buildEmailHtmlBody((p.nombre || "").trim()),
       name: "las virckys"
     });
   } catch (err) {
