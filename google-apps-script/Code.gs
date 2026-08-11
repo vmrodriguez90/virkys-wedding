@@ -69,9 +69,15 @@ function handleRequest(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
-    var sheet = getSheet();
     var p = (e && e.parameter) ? e.parameter : {};
 
+    // Visita a la URL sin datos (curiosos, bots, health checks): no guardamos
+    // una fila vacía ni mandamos email.
+    if (!(p.nombre || "").trim() && !(p.correo || "").trim()) {
+      return json({ ok: true, skipped: "sin datos" });
+    }
+
+    var sheet = getSheet();
     sheet.appendRow([
       new Date(),
       p.nombre || "",
