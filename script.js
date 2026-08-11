@@ -173,7 +173,7 @@
   // Google Apps Script web-app URL (ends in /exec). Leave empty to skip the
   // network call; paste your deployed endpoint to start saving to the Sheet.
   var RSVP_ENDPOINT =
-    "https://script.google.com/macros/s/AKfycbzyLYVqlQqg2x4uMeomudix-ScxIuVMBL5K_yQhwWg2pfb0SuSb56qgIPbIVSDgORDi/exec";
+    "https://script.google.com/macros/s/AKfycbw97bmYhpOVPLeU8WmluTHITj5vpK5uA-qLo0Z4b75a0w_gGB_GnNFzjw2iy12u6hnu/exec";
 
   /* ---- toggle + form interaction --------------------------- */
   function setupForm() {
