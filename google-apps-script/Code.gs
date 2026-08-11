@@ -56,6 +56,28 @@ function buildEmailBody() {
   );
 }
 
+// Versión HTML del mismo texto (permite la negrita en el nombre del lugar).
+// El texto plano de arriba queda como respaldo para clientes sin HTML.
+function buildEmailHtmlBody() {
+  return (
+    "<p>¡Hola!</p>" +
+    "<p>Este correo quiere decir que has completado tu asistencia y que nosotras " +
+    "estamos muy contentas de que vengas a nuestra boda 💘</p>" +
+    "<p>Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en " +
+    "<b>The Madrid EDITION</b>.<br>" +
+    "Aquí tienes la dirección exacta: Pl. de Celenque, 2, Centro, 28013 Madrid</p>" +
+    "<p>Es un día súper especial para nosotras y, sobre todo, un día de festejo. " +
+    "Así que lo más importante es que vengas con ganas de celebrar con nosotras. " +
+    "Todo lo demás da igual.</p>" +
+    "<p>Vamos a comer rico, bailar mucho y disfrutar con la gente que más queremos " +
+    "y que forma parte de nuestra vida.</p>" +
+    "<p>Tenemos muchísimas ganas de que llegue el día y de compartirlo contigo.</p>" +
+    "<p>Más cerca de la fecha, te volvemos a escribir, no te preocupes.</p>" +
+    "<p>Un abrazo grande,<br>" +
+    "Las virckys</p>"
+  );
+}
+
 function doGet(e) {
   return handleRequest(e);
 }
@@ -109,6 +131,7 @@ function sendConfirmationEmail(p) {
       to: correo,
       subject: EMAIL_SUBJECT,
       body: buildEmailBody(),
+      htmlBody: buildEmailHtmlBody(),
       name: "las virckys"
     });
   } catch (err) {
