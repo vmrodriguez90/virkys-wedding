@@ -35,25 +35,26 @@ var HEADERS = ["Fecha", "Nombre", "Correo", "Restricción/Preferencia", "Mensaje
 // Email de confirmación que se envía al invitado tras guardar su RSVP.
 // Poné SEND_CONFIRMATION en false para desactivarlo sin tocar el resto.
 var SEND_CONFIRMATION = true;
-var EMAIL_SUBJECT = "¡nos vemos en la boda! — las virckys";
+var EMAIL_SUBJECT = "¡Nos vemos en la boda! — las virckys";
 
 function buildEmailBody(nombre) {
   return (
     (nombre ? "¡Hola " + nombre + "!" : "¡Hola!") +
-    "\n\n" +
-    "Este correo quiere decir que has completado tu asistencia y que nosotras " +
-    "estamos muy contentas de que vengas a nuestra boda 💘\n\n" +
-    "Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en The Madrid EDITION.\n" +
-    "Aquí tienes la dirección exacta: Pl. de Celenque, 2, Centro, 28013 Madrid\n\n" +
+    " Si estás recibiendo este correo significa que has confirmado tu asistencia " +
+    "y que nosotras estamos muy contentas de que vengas a nuestra boda 💘\n\n" +
+    "Como te contamos, la boda es el sábado 29 de mayo a las 19:30 h en el hotel " +
+    "The Madrid EDITION. La dirección exacta es Pl. de Celenque, 2, Centro, 28013 Madrid.\n\n" +
     "Es un día súper especial para nosotras y, sobre todo, un día de festejo. " +
     "Así que lo más importante es que vengas con ganas de celebrar con nosotras. " +
     "Todo lo demás da igual.\n\n" +
     "Vamos a comer rico, bailar mucho y disfrutar con la gente que más queremos " +
-    "y que forma parte de nuestra vida.\n\n" +
+    "y que forma parte de nuestra vida (entre las que, obvio, estás vos). " +
+    "Como verás, mezclamos el vos y el tú todo el tiempo, porque así es como " +
+    "hablamos en casa todos los días jeje.\n\n" +
     "Tenemos muchísimas ganas de que llegue el día y de compartirlo contigo.\n\n" +
-    "Más cerca de la fecha, te volvemos a escribir, no te preocupes.\n\n" +
-    "Un abrazo grande,\n" +
-    "Las virckys"
+    "Más cerca de la fecha te volvemos a escribir, no te preocupes.\n\n" +
+    "Un abrazo muy grande,\n" +
+    "las virckys"
   );
 }
 
@@ -67,21 +68,22 @@ function buildEmailHtmlBody(nombre) {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
   return (
-    "<p>" + (nombreHtml ? "¡Hola " + nombreHtml + "!" : "¡Hola!") + "</p>" +
-    "<p>Este correo quiere decir que has completado tu asistencia y que nosotras " +
-    "estamos muy contentas de que vengas a nuestra boda 💘</p>" +
-    "<p>Como te contamos, la fecha es el sábado 29 de mayo a las 19:30 h en " +
-    "<b>The Madrid EDITION</b>.<br>" +
-    "Aquí tienes la dirección exacta: Pl. de Celenque, 2, Centro, 28013 Madrid</p>" +
+    "<p>" + (nombreHtml ? "¡Hola " + nombreHtml + "!" : "¡Hola!") +
+    " Si estás recibiendo este correo significa que has confirmado tu asistencia " +
+    "y que nosotras estamos muy contentas de que vengas a nuestra boda 💘</p>" +
+    "<p>Como te contamos, la boda es el sábado 29 de mayo a las 19:30 h en el hotel " +
+    "<b>The Madrid EDITION</b>. La dirección exacta es Pl. de Celenque, 2, Centro, 28013 Madrid.</p>" +
     "<p>Es un día súper especial para nosotras y, sobre todo, un día de festejo. " +
     "Así que lo más importante es que vengas con ganas de celebrar con nosotras. " +
     "Todo lo demás da igual.</p>" +
     "<p>Vamos a comer rico, bailar mucho y disfrutar con la gente que más queremos " +
-    "y que forma parte de nuestra vida.</p>" +
+    "y que forma parte de nuestra vida (entre las que, obvio, estás vos). " +
+    "Como verás, mezclamos el vos y el tú todo el tiempo, porque así es como " +
+    "hablamos en casa todos los días jeje.</p>" +
     "<p>Tenemos muchísimas ganas de que llegue el día y de compartirlo contigo.</p>" +
-    "<p>Más cerca de la fecha, te volvemos a escribir, no te preocupes.</p>" +
-    "<p>Un abrazo grande,<br>" +
-    "Las virckys</p>"
+    "<p>Más cerca de la fecha te volvemos a escribir, no te preocupes.</p>" +
+    "<p>Un abrazo muy grande,<br>" +
+    "las virckys</p>"
   );
 }
 
